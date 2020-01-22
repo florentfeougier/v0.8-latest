@@ -1,0 +1,1 @@
+<?php /**PATH /Users/florent/Dev/plantesaddict/prod/resources/views/fiches/partials/description.blade.php ENDPATH**/ ?>

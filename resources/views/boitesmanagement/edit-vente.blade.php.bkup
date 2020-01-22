@@ -1,0 +1,521 @@
+@extends('layouts.admin')
+
+@section('template_title')
+    {!! trans('ventesmanagement.editing-vente', ['name' => $vente->name]) !!}
+@endsection
+
+@section('template_linked_css')
+    <style type="text/css">
+        .btn-save,
+        .pw-change-container {
+            display: none;
+        }
+    </style>
+@endsection
+
+@section('content')
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            {!! trans('ventesmanagement.editing-vente', ['name' => $vente->name]) !!}
+                            <div class="pull-right">
+                                <a href="{{ route('manager.ventes') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="top" title="{{ trans('ventesmanagement.tooltips.back-ventes') }}">
+                                    <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
+                                    Retour aux ventes
+                                </a>
+                                <a href="{{ url('/ventes/' . $vente->id) }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{{ trans('ventesmanagement.tooltips.back-ventes') }}">
+                                    <i class="fa fa-fw fa-reply" aria-hidden="true"></i>
+                                    Voir la fiche de cette vente
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {!! Form::open(array('route' => ['ventes.update', $vente->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
+
+                            {!! csrf_field() !!}
+
+
+
+
+
+
+
+                                      <div class="form-group has-feedback row {{ $errors->has('status') ? ' has-error ' : '' }}">
+
+                                          {!! Form::label('store_enabled', 'Afficher cette vente', array('class' => 'col-md-3 control-label')); !!}
+
+                                          <div class="col-md-9">
+                                              <div class="input-group">
+
+						
+<select class="custom-select form-control" name="status" id="status">
+                                                    @if ($vente->status == "private")
+                                                            <option value="active"> Active</option>
+                                                            <option value="closed"> Terminé</option>
+                                                            <option value="private" selected> Privée</option>
+                                                    @elseif($vente->status == "closed")
+                                                      <option value='closed' selected> Terminé</option>
+                                                      <option value='private'> Privée</option>
+                                                      <option value='active' > Active</option>
+                                                    @elseif($vente->status == "active")
+                                                      <option value='active' selected> Active</option>
+                                                      <option value='private'> Privée</option>
+                                                      <option value='closed' > Terminé</option>
+                                                    @else
+                                                      <option value='active'> Sélectionner...</option>
+                                                      <option value='active'> En cours</option>
+                                                      <option value='private'> Privée</option>
+                                                      <option value='closed' > Terminé</option>
+                                                    @endif
+						</select>
+                                                  <div class="input-group-append">
+                                                      <label class="input-group-text" for="status">
+                                                          <i class="{{ trans('forms.create_product_icon_status') }}" aria-hidden="true"></i>
+                                                      </label>
+                                                  </div>
+                                              </div>
+                                              @if ($errors->has('status'))
+                                                  <span class="help-block">
+                                                      <strong>{{ $errors->first('status') }}</strong>
+                                                  </span>
+                                              @endif
+                                          </div>
+                                      </div>
+
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('is_public') ? ' has-error ' : '' }}">
+
+                                {!! Form::label('store_enabled', 'Afficher cette vente', array('class' => 'col-md-3 control-label')); !!}
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+
+                                        <select class="custom-select form-control" name="is_public" id="is_public">
+                                            @if ($vente->is_public == true)
+                                                    <option value=0> Privée</option>
+                                                    <option value=1 selected> Publique</option>
+                                            @else
+                                              <option value=0 selected> Privée</option>
+                                              <option value=1> Publique</option>
+
+                                            @endif
+                                        </select>
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="is_public">
+                                                <i class="{{ trans('forms.create_product_icon_is_public') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('is_public'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('store_enabled') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                                                        <div class="form-group has-feedback row {{ $errors->has('show_date') ? ' has-error ' : '' }}">
+
+                                                            {!! Form::label('store_enabled', 'Afficher la date publiquement', array('class' => 'col-md-3 control-label')); !!}
+
+                                                            <div class="col-md-9">
+                                                                <div class="input-group">
+
+                                                                    <select class="custom-select form-control" name="show_date" id="show_date">
+                                                                        @if ($vente->show_date == true)
+                                                                                <option value=0> Cacher la date</option>
+                                                                                <option value=1 selected> Afficher la date</option>
+                                                                        @else
+                                                                          <option value=0 selected> Cacher la date</option>
+                                                                          <option value=1> Afficher la date</option>
+
+                                                                        @endif
+                                                                    </select>
+                                                                    <div class="input-group-append">
+                                                                        <label class="input-group-text" for="show_date">
+                                                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                @if ($errors->has('show_date'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('store_enabled') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('show_location') ? ' has-error ' : '' }}">
+
+                                {!! Form::label('store_enabled', trans('forms.create_vente_label_show_location'), array('class' => 'col-md-3 control-label')); !!}
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+
+                                        <select class="custom-select form-control" name="show_location" id="show_location">
+					
+    @if ($vente->show_location == true)
+                                                    <option value=0> Cacher l'adresse</option>
+                                                    <option value=1 selected> Afficher l'adresse</option>
+                                            @else
+                                              <option value=0 selected> Cacher l'adresse</option>
+                                              <option value=1> Afficher l'adresse</option>
+
+                                            @endif
+</select>
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="show_location">
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('show_location'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('store_enabled') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
+                                {!! Form::label('name', trans('forms.create_vente_label_name'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('name', $vente->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_ventename'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="name">
+                                                <i class="fa fa-fw {{ trans('forms.create_vente_icon_ventename') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('name'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback row {{ $errors->has('slug') ? ' has-error ' : '' }}">
+                                {!! Form::label('slug', trans('forms.create_vente_label_slug'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('slug', $vente->slug, array('id' => 'slug', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_venteslug'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="slug">
+                                                <i class="fa fa-link" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('slug'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('slug') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
+                                {!! Form::label('description', trans('forms.create_vente_label_description'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('description', $vente->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_ventedescription'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="description">
+                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('description'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('description') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('location_address') ? ' has-error ' : '' }}">
+                                {!! Form::label('location_address', trans('forms.create_vente_label_location_address'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('location_address', $vente->location_address, array('id' => 'location_address', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_firstname'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="location_address">
+                                                <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('location_address'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('location_address') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback row {{ $errors->has('location_postalcode') ? ' has-error ' : '' }}">
+                                {!! Form::label('location_postalcode', trans('forms.create_vente_label_location_postalcode'), array('class' => 'col-md-2 control-label')); !!}
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        {!! Form::text('location_postalcode', $vente->location_postalcode, array('id' => 'location_postalcode', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_firstname'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="location_postalcode">
+                                                <i class="fa fa-map" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('location_postalcode'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('location_postalcode') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
+                                {!! Form::label('location_state', trans('forms.create_vente_label_location_state'), array('class' => 'col-md-2 control-label')); !!}
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        {!! Form::text('location_state', $vente->location_state, array('id' => 'location_state', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_firstname'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="location_state">
+                                                <i class="fa fa-map" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('location_state'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('location_state') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('location_country') ? ' has-error ' : '' }}">
+                                {!! Form::label('location_country', trans('forms.create_vente_label_location_country'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('location_country', $vente->location_country, array('id' => 'location_country', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_firstname'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="location_country">
+                                                <i class="fa fa-globe" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('location_country'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('location_country') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('date') ? ' has-error ' : '' }}">
+                                {!! Form::label('date', trans('forms.create_vente_label_date'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+				    <div class="input-group">
+
+                                        {!! Form::text('date', $vente->date, array('id' => 'date', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_date'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="date">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('date'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('date') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('horaires') ? ' has-error ' : '' }}">
+                                {!! Form::label('horaires', trans('forms.create_vente_label_horaires'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('horaires', $vente->horaires, array('id' => 'horaires', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_horaires'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="horaires">
+                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('horaires'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('horaires') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback row {{ $errors->has('color_code') ? ' has-error ' : '' }}">
+                                {!! Form::label('color_code', trans('forms.create_vente_label_color_code'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('color_code', $vente->color_code, array('id' => 'color_code', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_color_code'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="color_code">
+                                                <i class="fa fa-circle" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('color_code'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('color_code') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback row {{ $errors->has('fb_event_url') ? ' has-error ' : '' }}">
+                                {!! Form::label('fb_event_url', trans('forms.create_vente_label_fb_event_url'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('fb_event_url', $vente->fb_event_url, array('id' => 'fb_event_url', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_fb_event_url'))) !!}
+                                        <div class="input-group-append">
+                                            <label for="fb_event_url" class="input-group-text">
+                                                <i class="fa fa-fw {{ trans('forms.create_vente_icon_fb_event_url') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('fb_event_url'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('fb_event_url') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('meta_title') ? ' has-error ' : '' }}">
+                                {!! Form::label('meta_title', trans('forms.create_vente_label_meta_title'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('meta_title', $vente->meta_title, array('id' => 'meta_title', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_meta_title'))) !!}
+                                        <div class="input-group-append">
+                                            <label for="meta_title" class="input-group-text">
+                                                <i class="fa fa-fw {{ trans('forms.create_vente_icon_meta_title') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('meta_title'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('meta_title') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('meta_desc') ? ' has-error ' : '' }}">
+                                {!! Form::label('meta_desc', trans('forms.create_vente_label_meta_desc'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('meta_desc', $vente->meta_desc, array('id' => 'meta_desc', 'class' => 'form-control', 'placeholder' => trans('forms.create_vente_ph_meta_desc'))) !!}
+                                        <div class="input-group-append">
+                                            <label for="meta_desc" class="input-group-text">
+                                                <i class="fa fa-fw {{ trans('forms.create_vente_icon_meta_desc') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('meta_desc'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('meta_desc') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+<div class="form-group has-feedback row {{ $errors->has('products') ? ' has-error ' : '' }}">
+
+    {!! Form::label('products', trans('forms.create_vente_label_products'), array('class' => 'col-md-3 control-label')); !!}
+
+    <div class="col-md-9">
+        <div class="input-group">
+
+<select class="form-control" name="products[]" multiple="multiple">
+
+  @foreach ($products as $product)
+
+    <option value="{{$product->id}}"
+      @if(in_array($product->id, $vente->products->pluck('id')->toArray()))
+        selected='selected'
+      @endif
+      >
+    {{$product->name}}
+    </option>
+
+
+  @endforeach
+
+</select>
+            <div class="input-group-append">
+                <label class="input-group-text" for="products">
+                    <i class="{{ trans('forms.create_vente_icon_products') }}" aria-hidden="true"></i>
+                </label>
+            </div>
+        </div>
+        @if ($errors->has('role'))
+            <span class="help-block">
+                <strong>{{ $errors->first('role') }}</strong>
+            </span>
+        @endif
+    </div>
+</div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('role') ? ' has-error ' : '' }}">
+
+                                {!! Form::label('role', trans('forms.create_vente_label_role'), array('class' => 'col-md-3 control-label')); !!}
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <select class="custom-select form-control" name="role" id="role">
+                                            <option value="">{{ trans('forms.create_vente_ph_role') }}</option>
+                                            {{-- @if ($roles)
+                                                @foreach($roles as $role)
+                                                    <option value="{{ $role->id }}" {{ $currentRole->id == $role->id ? 'selected="selected"' : '' }}>{{ $role->name }}</option>
+                                                @endforeach
+                                            @endif --}}
+                                        </select>
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="role">
+                                                <i class="{{ trans('forms.create_vente_icon_role') }}" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('role'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('role') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+                            {!! Form::button('Enregistrer mes changements', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Enregistrer', 'data-message' => 'Enregistrer mes changements')) !!}
+
+                        {!! Form::close() !!}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @include('modals.modal-save')
+    @include('modals.modal-delete')
+
+@endsection
+
+@section('footer_scripts')
+  @include('scripts.delete-modal-script')
+  @include('scripts.save-modal-script')
+  @include('scripts.check-changed')
+@endsection

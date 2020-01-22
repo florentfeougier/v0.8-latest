@@ -1,0 +1,4 @@
+php artisan migrate --path=/database/migrations/2019_12_11_211253_create_boites_table.php
+php artisan migrate --path=/database/2019_12_11_212759_create_boite_product_table.php
+
+php artisan db:seed --class=BoitesTableSeeder

@@ -1,0 +1,768 @@
+@extends('layouts.admin')
+
+@section('template_title')
+    Modifier le produit {{$product->name}}
+@endsection
+
+@section('template_linked_css')
+    <style type="text/css">
+        .btn-save,
+        .pw-change-container {
+            display: none;
+        }
+    </style>
+@endsection
+
+@section('content')
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                          <span>Modifier le produit <b>{{$product->name}}</b> </span>
+                            <div class="pull-right">
+                                <a href="{{ route('manager.products') }}" class="btn btn-light btn-sm float-right"  data-placement="top" title="{{ trans('productsmanagement.tooltips.back-products') }}">
+                                    <i class="fa fa-fw fa-reply-all" aria-hidden="true"></i>
+                                    Retour aux products
+                                </a>
+                                <a href="{{ url('manager/products/' . $product->id) }}" class="btn btn-light btn-sm float-right"  data-placement="left" title="{{ trans('productsmanagement.tooltips.back-products') }}">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                    Voir la fiche de ce produit
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {!! Form::open(array('route' => ['products.update', $product->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation', 'files' => true, 'enctype'=>'multipart/form-data')) !!}
+
+                            {!! csrf_field() !!}
+
+
+
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
+                                {!! Form::label('name', trans('forms.create_product_label_name'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('name', $product->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => trans('forms.create_product_ph_productname'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="name">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('name'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('slug') ? ' has-error ' : '' }}">
+                                {!! Form::label('slug', trans('forms.create_product_label_slug'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('slug', $product->slug, array('id' => 'slug', 'class' => 'form-control', 'placeholder' => trans('forms.create_product_ph_productslug'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="slug">
+                                                <i class="fa fa-link" aria-hidden="true" data-toggle="tooltip" title="Permet de définir l'URL pour le SEO, ex: /mon-slug-produit"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('slug'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('slug') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+                                                        <div class="form-group has-feedback row {{ $errors->has('productcategorie') ? ' has-error ' : '' }}">
+
+                                                            {!! Form::label('store_enabled', trans('forms.create_product_label_store_enabled'), array('class' => 'col-md-3 control-label')); !!}
+
+                                                            <div class="col-md-9">
+                                                                <div class="input-group">
+
+                                                                    <select class="custom-select form-control" name="store_enabled" id="store_enabled">
+                                                                        @if ($product->store_enabled == true)
+                                                                                <option value="1" selected> Afficher</option>
+                                                                                <option value="0"> Ne pas afficher</option>
+                                                                        @else
+                                                                          <option value=0 selected> Ne pas afficher</option>
+                                                                          <option value=1 > Afficher</option>
+
+                                                                        @endif
+                                                                    </select>
+                                                                    <div class="input-group-append">
+                                                                        <label class="input-group-text" for="store_enabled">
+                                                                            <i class="fa fa-shield" aria-hidden="true"></i>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                @if ($errors->has('store_enabled'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('store_enabled') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('description') ? ' has-error ' : '' }}">
+                                {!! Form::label('description', "Description", array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('description', $product->description, array('id' => 'description', 'class' => 'form-control', 'placeholder' => "Courte description de votre produit")) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="description">
+                                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('description'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('description') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('specs') ? ' has-error ' : '' }}">
+                                {!! Form::label('specs', 'Information supplémentaire sur le produit', array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('specs', $product->specs, array('id' => 'specs', 'class' => 'form-control', 'placeholder' => 'Ex: Taille de pot')) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="specs">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('specs'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('specs') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+
+    <hr class="pt-3">
+
+    <h4 class="mb-3">Tarification</h4>
+
+
+
+                                <div class="form-group has-feedback row {{ $errors->has('price') ? ' has-error ' : '' }}">
+                                    {!! Form::label('price',"Prix de l'article", array('class' => 'col-md-3 control-label')); !!}
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            {!! Form::text('price', $product->price, array('id' => 'price', 'class' => 'form-control', 'placeholder' => "24,99")) !!}
+                                            <div class="input-group-append">
+                                                <label class="input-group-text" for="price">
+                                                    <i class="fa fa-eur" aria-hidden="true" data-toggle="tooltip" title="Prix du produit (TTC)"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @if($errors->has('price'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('price') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group has-feedback row {{ $errors->has('tax') ? ' has-error ' : '' }}">
+                                    {!! Form::label('tax', "Taux TVA (%)", array('class' => 'col-md-3 control-label')); !!}
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            {!! Form::text('tax', $product->tax, array('id' => 'tax', 'class' => 'form-control', 'placeholder' => '10')) !!}
+                                            <div class="input-group-append">
+                                                <label class="input-group-text" for="tax">
+                                                    <i class="fa fa-percent" aria-hidden="true"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @if($errors->has('tax'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('tax') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+    <div class="form-group has-feedback row {{ $errors->has('old_price') ? ' has-error ' : '' }}">
+        {!! Form::label('old_price', "Ancien prix", array('class' => 'col-md-3 control-label')); !!}
+        <div class="col-md-9">
+            <div class="input-group">
+                {!! Form::text('old_price', $product->old_price, array('id' => 'old_price', 'class' => 'form-control', 'placeholder' => '29,99')) !!}
+                <div class="input-group-append">
+                    <label class="input-group-text" for="old_price">
+                      <i class="fa fa-eur" aria-hidden="true" data-toggle="tooltip" title="Si renseigner, l'ancien prix sera affiché barré et de couleur grise"></i>
+                    </label>
+                </div>
+            </div>
+            @if($errors->has('old_price'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('old_price') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('stock') ? ' has-error ' : '' }}">
+                                {!! Form::label('stock', "Stock (restant):", array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('stock', $product->stock, array('id' => 'stock', 'class' => 'form-control', 'placeholder' => '120')) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="stock">
+                                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('stock'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('stock') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                                <hr class="pt-3">
+
+                                <h4 class="mb-3">Détails</h4>
+                            <div class="form-group has-feedback row {{ $errors->has('weight') ? ' has-error ' : '' }}">
+                                {!! Form::label('weight', "Poid de l'article (en g)", array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('weight', $product->weight, array('id' => 'weight', 'class' => 'form-control', 'placeholder' => "1000")) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="weight">
+                                                <i class="fa fa-balance-scale" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('weight'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('weight') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback row {{ $errors->has('height') ? ' has-error ' : '' }}">
+                                {!! Form::label('height', "Taille (cm)", array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('height', $product->height, array('id' => 'height', 'class' => 'form-control', 'placeholder' => "110")) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="height">
+                                                <i class="fa fa-text-height" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('height'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('height') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback row {{ $errors->has('color_code') ? ' has-error ' : '' }}">
+                                {!! Form::label('color_code', trans('forms.create_product_label_color_code'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('color_code', $product->color_code, array('id' => 'color_code', 'class' => 'form-control', 'placeholder' => trans('forms.create_product_ph_color_code'))) !!}
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="color_code">
+                                                <i style="color: {{$product->color_code }};" class="fa fa-circle" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if($errors->has('color_code'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('color_code') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <hr class="pt-3 ">
+
+<h4 class="py-2">Ventes et fiches d'entretien</h4>
+
+
+
+<div class="form-group has-feedback row {{ $errors->has('ventes') ? ' has-error ' : '' }}">
+    {!! Form::label('ventes',"Ventes associées", array('class' => 'col-md-3 control-label')); !!}
+    <div class="col-md-9">
+        <div class="input-group">
+          <select style="width:600px;" class="form-control ventes" name="ventes[]" multiple>
+          @foreach(\App\Models\Vente::all() as $vente)
+          @if($vente->products->contains($product->id))
+          <option value="{{$vente->id}}" selected>{{$vente->name}}</option>
+          @else
+          <option value="{{$vente->id}}" >{{$vente->name}}</option>
+
+          @endif
+          @endforeach
+
+          </select>
+            <div class="input-group-append">
+                <label class="input-group-text" for="ventes">
+                    <i style="color: {{$product->ventes }};" class="fa fa-circle" aria-hidden="true"></i>
+                </label>
+            </div>
+        </div>
+        @if($errors->has('ventes'))
+            <span class="help-block">
+                <strong>{{ $errors->first('ventes') }}</strong>
+            </span>
+        @endif
+    </div>
+</div>
+
+
+
+
+<div class="form-group has-feedback row {{ $errors->has('ventes') ? ' has-error ' : '' }}">
+    {!! Form::label('ventes',"Fiches d'entretien associées", array('class' => 'col-md-3 control-label')); !!}
+    <div class="col-md-9">
+        <div class="input-group">
+          <select class="form-control fiches" name="fiches[]" multiple="multiple">
+
+            @foreach ($fiches as $fiche)
+
+              <option value="{{$fiche->id}}"
+                @if(in_array($fiche->id, $product->fiches->pluck('id')->toArray()))
+                  selected='selected'
+                @endif
+                >
+              {{$fiche->name}}
+              </option>
+
+
+            @endforeach
+
+          </select>
+            <div class="input-group-append">
+                <label class="input-group-text" for="ventes">
+                    <i style="color: {{$product->ventes }};" class="fa fa-circle" aria-hidden="true"></i>
+                </label>
+            </div>
+        </div>
+        @if($errors->has('ventes'))
+            <span class="help-block">
+                <strong>{{ $errors->first('ventes') }}</strong>
+            </span>
+        @endif
+    </div>
+</div>
+
+
+
+                                                        {{-- <div class="form-group has-feedback row {{ $errors->has('ventes') ? ' has-error ' : '' }}">
+
+                                                            {!! Form::label('ventes', "Vendre dans les ventes", array('class' => 'col-md-3 control-label')); !!}
+
+                                                            <div class="col-md-9">
+                                                                <div class="input-group">
+
+                                                        <select class="form-control" name="ventes[]" multiple="multiple">
+
+                                                          @foreach ($ventes as $fiche)
+
+                                                            <option value="{{$fiche->id}}"
+                                                              @if(in_array($fiche->id, $product->ventes->pluck('id')->toArray()))
+                                                                selected='selected'
+                                                              @endif
+                                                              >
+                                                            {{$fiche->name}} - {{$fiche->date}}
+                                                            </option>
+
+
+                                                          @endforeach
+
+                                                        </select>
+                                                                    <div class="input-group-append">
+                                                                        <label class="input-group-text" for="ventes">
+                                                                            <i class="{{ trans('forms.create_vente_icon_products') }}" aria-hidden="true"></i>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                @if ($errors->has('ventes'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('ventes') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div> --}}
+
+
+
+
+
+<hr>
+
+<div class="form-group has-feedback row {{ $errors->has('productcategorie') ? ' has-error ' : '' }}">
+
+    {!! Form::label('productcategorie', trans('forms.create_product_label_productcategorie'), array('class' => 'col-md-3 control-label')); !!}
+
+    <div class="col-md-9">
+        <div class="input-group">
+
+            <select class="form-control custom-select form-control" name="productcategorie_id" id="productcategorie">
+                <option value="">Sélectionner une catégorie</option>
+                @if ($productcategories)
+                    @foreach($productcategories as $productcategorie)
+                        <option value="{{ $productcategorie->id }}" {{ $product->productcategorie_id == $productcategorie->id ? 'selected="selected"' : '' }}>{{ $productcategorie->name }}</option>
+                    @endforeach
+                @endif
+            </select>
+            <div class="input-group-append">
+                <label class="input-group-text" for="productcategorie">
+                    <i class="fa fa-list-ul" aria-hidden="true"></i>
+                </label>
+            </div>
+        </div>
+        @if ($errors->has('productcategorie'))
+            <span class="help-block">
+                <strong>{{ $errors->first('productcategorie') }}</strong>
+            </span>
+        @endif
+    </div>
+</div>
+
+
+<div class="form-group has-feedback row {{ $errors->has('productlabel') ? ' has-error ' : '' }}">
+
+    {!! Form::label('productlabel', trans('forms.create_product_label_productlabel'), array('class' => 'col-md-3 control-label')); !!}
+
+    <div class="col-md-9">
+        <div class="input-group">
+            <select class="custom-select form-control" name="productlabel_id" id="productlabel">
+
+              @if($product->productlabel_id == null)
+                <option value=null>Aucun label</option>
+
+                @foreach($productlabels as $productlabel)
+                    <option value="{{ $productlabel->id }}">{{ $productlabel->name }}</option>
+                @endforeach
+              @else
+                <option value="null">Aucun label</option>
+
+                @foreach($productlabels as $productlabel)
+                    <option value="{{ $productlabel->id }}" {{ $product->productlabel_id == $productlabel->id ? 'selected="selected"' : '' }}>{{ $productlabel->name }}</option>
+                @endforeach
+              @endif
+
+                {{-- @if(count($product->productlabels) > 0)
+
+                  <option value="{{ $product->productlabels->id }}" selected>{{ $product->productlabels->name }}</option>
+
+                @else
+                  <option value="10">Aucun label</option>
+
+                  @foreach($productlabels as $productlabel)
+                      <option value="{{ $productlabel->id }}" {{ $product->productlabel_id == $productlabel->id ? 'selected="selected"' : '' }}>{{ $productlabel->name }}</option>
+                  @endforeach
+                @endif --}}
+                {{-- @if ($productlabels)
+                    @foreach($productlabels as $productlabel)
+                        <option value="{{ $productlabel->id }}" {{ $product->productlabel_id == $productlabel->id ? 'selected="selected"' : '' }}>{{ $productlabel->name }}</option>
+                    @endforeach
+                @endif --}}
+            </select>
+            <div class="input-group-append">
+                <label class="input-group-text" for="productlabel">
+                    <i class="fa fa-tags" aria-hidden="true"></i>
+                </label>
+            </div>
+        </div>
+        @if ($errors->has('productlabel'))
+            <span class="help-block">
+                <strong>{{ $errors->first('productlabel') }}</strong>
+            </span>
+        @endif
+    </div>
+</div>
+
+<hr>
+
+                                                        <div class="form-group has-feedback row {{ $errors->has('thumbnail') ? ' has-error ' : '' }}">
+                                                            {!! Form::label('thumbnail', "Image principal du produit", array('class' => 'col-md-3 control-label')); !!}
+                                                            <div class="col-md-6">
+
+                                                                                                                      <div class="input-group mb-3">
+                                                                         <div class="custom-file">
+                                                                             <input type="file" name="thumbnail" class="custom-file-input" id="inputGroupFile02"/>
+                                                                             <label class="custom-file-label" for="inputGroupFile02">Sélectionner votre image...</label>
+                                                                         </div>
+                                                                         <div class="input-group-append">
+                                                                             <button class="btn btn-primary">Télécharger</button>
+                                                                         </div>
+                                                                     </div>
+                                                                     <script>
+                                                                         $('#inputGroupFile02').on('change',function(){
+                                                                             //get the file name
+                                                                             var fileName = $(this).val();
+                                                                             //replace the "Choose a file" label
+                                                                             $(this).next('.custom-file-label').html(fileName);
+                                                                         })
+                                                                     </script>
+                                                                @if($errors->has('thumbnail'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('thumbnail') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                              <img class="rounded" width="150px" src="{{asset("storage/" . $product->thumbnail)}}" alt="">
+
+                                                            </div>
+                                                        </div>
+
+
+
+
+
+
+<hr>
+
+                                                        <div class="form-group has-feedback row {{ $errors->has('picture_one') ? ' has-error ' : '' }}">
+                                                            {!! Form::label('picture_one', "Image #1 (afficher sur la page du produit)", array('class' => 'col-md-3 control-label')); !!}
+                                                            <div class="col-md-6">
+
+                                                                                                                      <div class="input-group mb-3">
+                                                                         <div class="custom-file">
+                                                                             <input type="file" name="picture_one" class="custom-file-input" id="inputGroupFile02"/>
+
+                                                                            <label class="custom-file-label" for="inputGroupFile02">Sélectionner votre image...</label>
+
+
+
+                                                                         </div>
+                                                                         <div class="input-group-append">
+                                                                             <button class="btn btn-primary">Télécharger</button>
+                                                                         </div>
+                                                                     </div>
+                                                                     <script>
+                                                                         $('#inputGroupFile02').on('change',function(){
+                                                                             //get the file name
+                                                                             var fileName = $(this).val();
+                                                                             //replace the "Choose a file" label
+                                                                             $(this).next('.custom-file-label').html(fileName);
+                                                                         })
+                                                                     </script>
+                                                                @if($errors->has('picture_one'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('picture_one') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                              @if($product->picture_one != null)
+                                                              <img width="150px" class="rounded" src="{{asset("storage/" . $product->picture_one)}}" alt="">
+                                                            @else
+                                                              <span>Aucune.</span>
+                                                            @endif
+                                                            </div>
+                                                        </div>
+
+
+<div class="col-md-12">
+  <input class="form-check-input" value="1" name="picture_one_delete" type="checkbox" id="gridCheck1">
+  <label class="form-check-label" for="gridCheck1">
+    Supprimer (cliquer et enregistrer pour valider la suppresion)
+  </label>
+</div>
+
+
+<hr>
+
+
+
+
+                                                        <div class="form-group has-feedback row {{ $errors->has('picture_two') ? ' has-error ' : '' }}">
+                                                            {!! Form::label('picture_two', "Image #2 (afficher sur la page du produit)", array('class' => 'col-md-3 control-label')); !!}
+                                                            <div class="col-md-6">
+
+                                                                                                                      <div class="input-group mb-3">
+                                                                         <div class="custom-file">
+                                                                             <input type="file" name="picture_two" class="custom-file-input" id="inputGroupFile02"/>
+                                                                             <label class="custom-file-label" for="inputGroupFile02">Sélectionner votre image...</label>
+                                                                         </div>
+                                                                         <div class="input-group-append">
+                                                                             <button class="btn btn-primary">Télécharger</button>
+                                                                         </div>
+                                                                     </div>
+                                                                     <script>
+                                                                         $('#inputGroupFile02').on('change',function(){
+                                                                             //get the file name
+                                                                             var fileName = $(this).val();
+                                                                             //replace the "Choose a file" label
+                                                                             $(this).next('.custom-file-label').html(fileName);
+                                                                         })
+                                                                     </script>
+                                                                @if($errors->has('picture_two'))
+                                                                    <span class="help-block">
+                                                                        <strong>{{ $errors->first('picture_two') }}</strong>
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                              @if($product->picture_two != null)
+                                                              <img width="150px" class="rounded" src="{{asset("storage/" . $product->picture_two)}}" alt="">
+                                                            @else
+                                                              <span>Aucune.</span>
+                                                            @endif
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12">
+                                                          <input class="form-check-input" value="1" name="picture_two_delete" type="checkbox" id="gridCheck2">
+                                                          <label class="form-check-label" for="gridCheck2">
+                                                            Supprimer (cliquer et enregistrer pour valider la suppresion)
+                                                          </label>
+                                                        </div>
+
+<hr>
+
+
+                                                                                    <div class="form-group has-feedback row {{ $errors->has('video_url') ? ' has-error ' : '' }}">
+                                                                                        {!! Form::label('video_url', "Vidéo (URL)", array('class' => 'col-md-3 control-label')); !!}
+                                                                                        <div class="col-md-9">
+                                                                                            <div class="input-group">
+                                                                                              <div class="input-group-prepend">
+                                                                                                  <label class="input-group-text" for="video_url">
+                                                                                                    https://www/plantesaddict.fr/storage/
+                                                                                                  </label>
+                                                                                              </div>
+                                                                                                {!! Form::text('video_url', $product->video, array('id' => 'video_url', 'class' => 'form-control', 'placeholder' => "nom-de-la-video.mp4")) !!}
+                                                                                                <div class="input-group-append">
+                                                                                                    <label class="input-group-text" for="video_url">
+                                                                                                        <i class="fa fa-link" aria-hidden="true" data-toggle="tooltip" title="Laisser vide pour ne pas afficher de vidéo"></i>
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            @if($errors->has('video_url'))
+                                                                                                <span class="help-block">
+                                                                                                    <strong>{{ $errors->first('video_url') }}</strong>
+                                                                                                </span>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+
+
+                                                        <div class="col-md-12">
+                                                          <a target="_blank" href="{{url("elfinder")}}">Ajouter / Renommer une vidéo</a>
+                                                        </div>
+
+
+
+
+<hr>
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('meta_title') ? ' has-error ' : '' }}">
+                                {!! Form::label('meta_title', trans('forms.create_product_label_meta_title'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('meta_title', $product->meta_title, array('id' => 'meta_title', 'class' => 'form-control', 'placeholder' => trans('forms.create_product_ph_meta_title'))) !!}
+                                        <div class="input-group-append">
+                                            <label for="meta_title" class="input-group-text">
+                                                <i class="fa fa-commenting" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('meta_title'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('meta_title') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group has-feedback row {{ $errors->has('meta_desc') ? ' has-error ' : '' }}">
+                                {!! Form::label('meta_desc', trans('forms.create_product_label_meta_desc'), array('class' => 'col-md-3 control-label')); !!}
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        {!! Form::text('meta_desc', $product->meta_desc, array('id' => 'meta_desc', 'class' => 'form-control', 'placeholder' => trans('forms.create_product_ph_meta_desc'))) !!}
+                                        <div class="input-group-append">
+                                            <label for="meta_desc" class="input-group-text">
+                                                <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('meta_desc'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('meta_desc') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+                            {!! Form::button('Enregistrer mes changements', array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'button', 'data-toggle' => 'modal', 'data-target' => '#confirmSave', 'data-title' => 'Enregistrer', 'data-message' => 'Enregistrer mes changements')) !!}
+
+                        {!! Form::close() !!}
+                    </div>
+
+                </div>
+                {!! Form::open(array('url' => 'manager/products/' . $product->id, 'class' => '', 'data-toggle' => 'tooltip', 'title' => 'Supprimer')) !!}
+                    {!! Form::hidden('_method', 'DELETE') !!}
+                    {!! Form::button("Supprimer ce produit", array('class' => 'btn btn-danger btn-sm','type' => 'button', 'style' =>'width: 100%;' ,'data-toggle' => 'modal', 'data-target' => '#confirmDelete', 'data-title' => 'Supprimer ce produit', 'data-message' => 'Etes vous sur de vouloir supprimer ce produit ?')) !!}
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+    @include('modals.modal-save')
+    @include('modals.modal-delete')
+
+@endsection
+
+@section('footer_scripts')
+  @include('scripts.delete-modal-script')
+  @include('scripts.save-modal-script')
+  @if(config('productsmanagement.tooltipsEnabled'))
+      @include('scripts.tooltips')
+  @endif
+  @include('scripts.check-changed')
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+  <script type="text/javascript">
+    $('.ventes').selectpicker();
+    $('.fiches').selectpicker();
+  </script>
+@endsection
+

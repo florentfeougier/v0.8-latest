@@ -1,0 +1,19 @@
+/*!
+ * Base
+ */
+@import './bootstrap.min.css';
+@import './animate.min.css';
+@import './hamburger.min.css';
+
+/*!
+ * Core
+ */
+@import './main.css';
+@import './util.css';
+
+
+.wrap-btn-slide1:hover > img {
+  padding-left: 8px;
+  transition-duration: 0.3s;
+
+}

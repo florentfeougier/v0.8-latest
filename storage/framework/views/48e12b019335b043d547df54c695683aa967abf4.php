@@ -1,0 +1,1 @@
+<?php /**PATH /Users/florent/Dev/plantesaddict/prod/resources/views/paymentsmanagement/edit-payment.blade.php ENDPATH**/ ?>
