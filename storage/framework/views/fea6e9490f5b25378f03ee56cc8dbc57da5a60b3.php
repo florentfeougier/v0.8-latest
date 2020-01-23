@@ -183,8 +183,7 @@ Nos box
             <span class="block4-overlay-heart  text-white  flex-m trans-0-4 p-4">
 
               <span class="p-t-2 ">
-                <img src="<?php echo e(asset("storage/icons/calendar-w.svg")); ?>" style="width:20px;margin:0; padding:0;"width="20px" height="15px" alt="Date de l'evenement">
-                <?php echo e(date('d/m/Y', strtotime($boite->date))); ?> de <?php echo e($boite->horaires); ?></span>
+                </span>
             </span>
 
             <div class="block4-overlay-txt trans-0-4 p-4">
@@ -195,12 +194,7 @@ Nos box
 
               <span class="s-text9 text-white">
                 <img  src="<?php echo e(asset("storage/icons/marker-w.svg")); ?>" style="width:20px;margin:0; padding:0;" width="20px" height="15px" alt="Lieu de la vente">
-<?php if($boite->show_location == true): ?>
-   <?php echo e($boite->location_address); ?> - <?php echo e($boite->location_postalcode); ?>
 
-<?php else: ?>
-  Lieu non dévoilé
-<?php endif; ?>
               </span>
             </div>
           </a>

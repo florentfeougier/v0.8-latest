@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Vente;
 use App\Models\Product;
+use App\Models\Boite;
 use App\Models\Voucher;
 use App\Models\ProductCategorie;
 use App\Notifications\SendLowStockEmail;
@@ -101,6 +102,12 @@ class CartController extends Controller
     */
     public function store($cart, Request $request){
 
+ if(Boite::where('slug', $cart)->first() != null){
+      if(Cart::instance($cart)->count() == Boite::where('slug', $cart)->first()->product_quantity){
+                return Redirect::back()->with('warning', 'Vous ne pouvez plus ajouter de plantes à votr box.');
+        }
+      }
+
       $ventes = Vente::where('is_public', 1)->get();
       // Check
       $validatedData = $request->validate([
@@ -114,6 +121,7 @@ class CartController extends Controller
       $cartName = $cart;
       // Now we are sure the cart exist
       $cart = Cart::instance($cart);
+
 
       $product = Product::find($request->product);
 
@@ -165,8 +173,8 @@ class CartController extends Controller
 
 
       // Redirect back with success
-      $message = "<strong>Youpi!</strong> $product->name ajouté à votre panier ($cartCount articles) <a class='ml-2 bo-rad-23 btn btn-outline-secondary' href='/panier/$cartName'>Voir le panier</a> <a class='btn btn-info ml-2 bo-rad-23' href='/panier/$cartName/checkout'>Valider ma commande</a>";
-      return Redirect::back()->with('success', $message);
+      //$message = "<strong>Youpi!</strong> $product->name ajouté à votre panier ($cartCount articles) <a class='ml-2 bo-rad-23 btn btn-outline-secondary' href='/panier/$cartName'>Voir le panier</a> <a class='btn btn-info ml-2 bo-rad-23' href='/panier/$cartName/checkout'>Valider ma commande</a>";
+      return Redirect::back();
     }
 
     /**

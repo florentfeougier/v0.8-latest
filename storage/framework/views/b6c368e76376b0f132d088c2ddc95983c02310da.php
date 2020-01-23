@@ -252,7 +252,8 @@
   Commande réceptionné par le client
 
     <a class="btn btn-sm  btn-outline-secondary" href="<?php echo e(url("manager/orders/" . $order->id . "/close")); ?>">Annuler <i class="fa fa-times"></i></a>
-  <?php else: ?>
+  <?php elseif( \App\Models\Vente::where('slug', $order->cart)->first() != null): ?>
+
    <p class="text-muted">
    Le client viendra récupérer sa commande lors de la vente de <?php echo e(\App\Models\Vente::where('slug', $order->cart)->first()->name); ?> du <?php echo e(\App\Models\Vente::where('slug', $order->cart)->first()->date); ?> à l'adresse: <?php echo e(\App\Models\Vente::where('slug', $order->cart)->first()->location_address); ?> <?php echo e(\App\Models\Vente::where('slug', $order->cart)->first()->location_postalcode); ?>
 
@@ -261,7 +262,8 @@
   La commande n'a pas encore été réceptionné par le client.
 
   <a class="btn btn-sm btn-outline-success" href="<?php echo e(url("manager/orders/" . $order->id . "/close")); ?>">Remettre la commande au client <i class="fa fa-check"></i></a>
-
+  <?php else: ?>
+  Box
   <?php endif; ?>
 </p>
 <?php endif; ?>

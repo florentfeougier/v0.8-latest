@@ -150,7 +150,7 @@
   	@if($boite->show_location == 1)
   		<a target="_blank" href="https://www.google.fr/maps/place/{{$boite->location_address}}+{{$boite->location_city}}" class="animated bounceInLeft fontsize-4 my-1 badge badge-pill badge-danger" data-toggle="tooltip" data-placement="top" title="Voir sur Google Maps"><img src="{{asset('storage/icons/marker-w.svg')}}" class="mr-1" height="20px" alt="Lieu:"> {{$boite->location_address}} - {{$boite->location_postalcode}}</a>
   	@else
-  		<span  class="animated bounceInLeft my-1 fontsize-4 badge badge-pill badge-danger"> <img src="{{asset('storage/icons/marker-w.svg')}}" class="mr-1" height="20px" alt="Lieu:"> 29,99 € Livraison incluse</span>
+  		<span  class="animated bounceInLeft my-1 fontsize-4 badge badge-pill badge-danger"> <img src="{{asset('storage/icons/marker-w.svg')}}" class="mr-1" height="20px" alt="Lieu:"> {{ $boite->price }}€ Livraison incluse</span>
   	@endif
 
 
@@ -158,90 +158,12 @@
 
   <!-- Countdown -->
 <div>
-  
-      @if(Cart::instance("$boite->slug")->count() == $boite->product_quantity)
-          @foreach(Cart::instance("$boite->slug")->content() as $selectedProduct)
-          <?php $product = \App\Models\Product::find($selectedProduct->id); ?>
-           <a style="float:left;" href="remove">
-              <img src="{{ url("$product->thumbnail") }}" style="float:left;height:60px;border-radius:30px;border: 1px solid red;" alt="">
-            </a>
-          @if($selectedProduct->qty == "2")
-            <a style="float:left;" href="remove" >
-              <img src="{{ url("$product->thumbnail") }}" style="float:left;height:60px;border-radius:30px;border: 1px solid red;" alt="">
-            </a>
-          @elseif($selectedProduct->qty == "3")
-           <a style="float:left;" href="remove" >
-              <img  src="{{ url("$product->thumbnail") }}" style="float:left;height:60px; border-radius:30px;border: 1px solid red;" alt="">
-            </a>
-          @endif
-          @endforeach
 
-          <a class=" btn btn-outline-danger bg-white" style="padding-top:10px;margin-top:10px !important;text-align:center;display:block;" href="{{ url("box/" . $boite->slug . "/checkout") }}">Valider ma box ></a> 
-
-      @elseif(Cart::instance("$boite->slug")->count() < $boite->product_quantity)
-          @foreach(Cart::instance("$boite->slug")->content() as $selectedProduct)
-          <?php $product = \App\Models\Product::find($selectedProduct->id); ?>
-          <img src="{{ url("$product->thumbnail") }}" style="float:left;height:60px;border: 1px solid red;" alt="">
-          @endforeach
-                   Vous devez encore sélectionner des plantes.    
- 
-      @else
-           <span class="badge badge-secondary mt-3 ">Aucune plante sélectionnée </span>
-
-      @endif
-   
-</div>
 
   @if(\Carbon\Carbon::now() > $boite->date)
   @else
-  <div class="flex-c-m pt-4">
 
-  <!-- Jours -->
-    <div class="flex-col-c-m size3 bo1 bg-white mr-1 animated flipInY" style="width:65px;">
-      <span class="countdown-value m-text10 p-b-1 days font-3" >
-        1
-      </span>
 
-      <span class="countdown-unit s-text5 font-3" >
-        jours
-      </span>
-    </div>
-
-  <!-- Heures -->
-      <div class="flex-col-c-m size3 bg-white bo1 mr-1 animated flipInY" style="width:65px;">
-        <span class="countdown-value m-text10 p-b-1 hours font-3" >
-          2
-        </span>
-
-        <span class="countdown-unit s-text5 font-3" >
-          heures
-        </span>
-      </div>
-
-  <!-- Minutes -->
-      <div class="flex-col-c-m size3 bg-white bo1 mr-1 animated flipInY" style="width:65px;">
-        <span class="countdown-value m-text10 p-b-1 minutes font-3" >
-          32
-        </span>
-
-        <span class="countdown-unit s-text5 font-3" >
-          mins
-        </span>
-      </div>
-
-  <!-- Secondes -->
-      <div class="flex-col-c-m size3 bg-white bo1 mr-1 animated flipInY" style="width:65px;">
-        <span class="countdown-value m-text10 p-b-1 seconds" style="font-family: 'Amatic SC', cursive;">
-          05
-        </span>
-
-        <span class="countdown-unit s-text5" style="font-family: 'Amatic SC', cursive;">
-          secs
-        </span>
-
-      </div>
-
-      </div> 	<!-- End flex -->
 
 
   <!-- Panier -->
@@ -280,12 +202,48 @@
 
 						<h3 id="products" class="my-4 text-center">
               Configurer votre box sur mesure <br>
-              <small class="font-3">Sélectionner vos plantes en cliquant sur leur photos.</small>
+              <small class="font-3"> Vous avez sélectionné {{ Cart::instance("$boite->slug")->count() }} plante(s) sur {{ $boite->product_quantity}}</small>
 
             </h3>
 
+      <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+          
+           @if(Cart::instance("$boite->slug")->count() == 0)
+            <p class="text-center">Aucune plante sélectionnée.</p>
+           @elseif(Cart::instance("$boite->slug")->count() < $boite->product_quantity)
+
+                @foreach(Cart::instance("$boite->slug")->content() as $selectedProduct)
+              <?php $product = \App\Models\Product::find($selectedProduct->id); ?>
+               <span class="text-center" >
+                  <img src="{{ url("$product->thumbnail") }}" style="float:left;height:60px;border-radius:30px;border: 1px solid red;" alt="">
+                </span>
+              @if($selectedProduct->qty == "2")
+                <a style="float:left;" href="remove" >
+                  <img src="{{ url("$product->thumbnail") }}" style="float:left;height:60px;border-radius:30px;border: 1px solid red;" alt="">
+                </a>
+              @elseif($selectedProduct->qty == "3")
+               <a style="float:left;" href="remove" >
+                  <img  src="{{ url("$product->thumbnail") }}" style="float:left;height:60px; border-radius:30px;border: 1px solid red;" alt="">
+                </a>
+              @endif
+              @endforeach
 
 
+
+
+           @elseif(Cart::instance("$boite->slug")->count() == $boite->product_quantity)
+           <div class="text-center">
+             <a href="{{ url("box/" . $boite->slug . "/checkout") }}" class="btn float-center text-center btn-danger">Valider et commander ma box</a>
+           </div>
+           @endif
+
+
+        </div>
+        <div class="col-3"></div>
+      </div>
+</div>
 
 					<!-- Product -->
 					<div class="row">
@@ -302,11 +260,9 @@
 >
 
 
-    				<img src="{{asset("$product->thumbnail")}}" alt="{{$product->name}} - {{$product->description}}" style="@foreach(Cart::instance("$boite->slug")->content() as $selected)
-@if($selected->id == $product->id)
+    				<img src="{{asset("$product->thumbnail")}}" alt="{{$product->name}} - {{$product->description}}" style="
 border: 2px solid red;
-@endif
-@endforeach">
+">
 
     				<div class="block2-overlay trans-0-4">
 
@@ -315,23 +271,31 @@ border: 2px solid red;
     						<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
     					</a>
 
-    					<a href="" class="text-center" style="display:block;height:100%;">
-    						<img src="{{asset('storage/icons/eye-closeup.svg')}}" height="40px" style="margin-top:43%;font-size:40px;">
-    					 </a>
+    					<p href="" class="text-center" style="display:block;height:100%;">
+    						{{-- <img src="{{asset('storage/icons/eye-closeup.svg')}}" height="40px" style="margin-top:43%;font-size:40px;"> --}}
+    					 </p>
 
     					<div class="block2-btn-addcart  trans-0-4">
-                <form action="{{url("panier/$boite->slug/store")}}" method="post">
+
+                @foreach(Cart::instance("$boite->slug")->content() as $selected)
+@if($selected->id == $product->id)
+ <form action="{{url("panier/$boite->slug/remove")}}" method="post">
                   {{csrf_field()}}
                 <input type="hidden" name="cart" value="{{$boite->slug}}">
                 <input type="hidden" name="product" value="{{$product->id}}">
-    						<input type="hidden" name="quantity" value="1">
-    						<div class="">
+                <input type="hidden" name="quantity" value="1">
+                <div class="">
                   <button type="submit" style="width:100%;" class=" text-center fontsize-1 bg4 bo-rad-23 hov1 ml-auto mr-auto text-white btn">
-     Ajouter
-
+     Supprimer
+</div>
                   </button>
                 </form>
-    	</div>
+@endif
+@endforeach
+               
+
+
+    	
 
     					</div>
     				</div> <!-- end block2-overlay -->
@@ -341,11 +305,63 @@ border: 2px solid red;
 
         		<!-- Blog -->
         			<div class="block2-txt p-t-20 fontsize-2 text-center py-2">
-        				<a href="{{url("boites/$boite->slug/produits/$product->slug")}}" class="badge fontsize-3">
+        				<a href="{{url("boites/$boite->slug/produits/$product->slug")}}" class="badge fontsize-1">
         					{{$product->name}}
         				</a>
+ 
 
-<span class="badge badge-pill badge-success">Voir</span>
+<div class="row">
+<div class="col-1"></div>
+  <div class="col-2">
+    <form action="{{url("panier/$boite->slug/remove")}}" method="post">
+                  {{csrf_field()}}
+                <input type="hidden" name="cart" value="{{$boite->slug}}">
+                <input type="hidden" name="product" value="{{$product->id}}">
+                <input type="hidden" name="quantity" value="1">
+                <div class="">
+                  <button type="submit"  class=" text-center px-2 py-1 mt-2 fontsize-1 bo-rad-23 hov1  text-white btn-danger">
+     -
+</div>
+                  </button>
+                </form>  
+  </div>
+
+  <div class="col-3">
+    
+                <span class="btn btn-danger">
+                  <?php $added="0"; ?>
+                   @foreach(Cart::instance("$boite->slug")->content() as $selected)
+@if($selected->id == $product->id)
+
+{{ $selected->qty ?? "0" }}
+<?php $added="1"; ?>
+@endif
+@endforeach
+
+@if($added == "0")
+0
+@endif
+                </span>
+  </div>
+
+ <div class="col-2">
+   <form action="{{url("panier/$boite->slug/store")}}" method="post">
+                  {{csrf_field()}}
+                <input type="hidden" name="cart" value="{{$boite->slug}}">
+                <input type="hidden" name="product" value="{{$product->id}}">
+                <input type="hidden" name="quantity" value="1">
+                <div class="">
+                  <button type="submit"  class=" text-center fontsize-1 px-2 py-1 mt-2 bo-rad-23 hov1 text-white btn-danger">
+     +
+</div>
+                  </button>
+                </form>
+ </div>
+ <div class="col-1"></div>
+</div>
+
+
+
                 
         			</div>
 
@@ -399,14 +415,18 @@ border: 2px solid red;
 <section class="pt-2 pb-4">
 <div class="container">
 
-  <h4 class="font-2b fontsize-6 text-center pt-1">Comment ça marche ?</h4>
-<p class="text-center font-3 pt-4 pb-3 fontsize-5">{{$boite->description}} </p>
+  <h4 class="font-2b fontsize-6 text-center pt-1">Notre box sur mesure</h4>
+<p class="text-center font-3 pt-4 pb-3 fontsize-5">
+<img src="https://www.plantesaddict.fr/storage/images/box.jpg" height="190px" alt="">
+</p>
 
-<div class="container text-center pb-4">
+
+
+{{-- div class="container text-center pb-4">
   <a href="{{$boite->fb_event_url}}" target="_blank" title="S'inscrire à l'evenement Facebook de la boite éphemère de {{$boite->location_city}}" class="wrap-btn-slide1 text-center font-2 bo-rad-23 btn btn-primary animated zoomIn" >
     Voir l'évenement Facebook <img class="ml-2" src="{{asset('storage/icons/facebook.svg')}}" height="20px" alt="Cliquer ici pour voir nos boites">
   </a>
-</div>
+</div> --}}
 		<div class="row mbr-justify-content-center mt-2">
 
             <div class="col-lg-6 mbr-col-md-10">
@@ -426,7 +446,7 @@ border: 2px solid red;
                       <img src="{{asset('storage/icons/open.svg')}}" height="70px" class="mbr-iconfont fa-globe fa">
                     </div>
                     <div class="text-wrap vcenter">
-                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Livrée chez vous</span>
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Livraison rapide chez vous</span>
                         </h2>
                         <p class="mbr-fonts-style text1 mbr-text display-6">Nous avons développé une box sur mesure pour nous permettre de vous envoyer vos plantes dans les meilleurs conditions.
 
@@ -459,8 +479,8 @@ border: 2px solid red;
                       <img src="{{asset('storage/icons/shelf.svg')}}" height="70px" class="mbr-iconfont fa-globe fa">
                     </div>
                     <div class="text-wrap vcenter">
-                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Quantité limitée <span>Commandez sur le site</span></h2>
-                        <p class="mbr-fonts-style text1 mbr-text display-6">Pensez à venir le matin ou à pré-commander sur le site pour être sur d'avoir vos plantes!</p>
+                        <h2 class="mbr-fonts-style mbr-bold mbr-section-title3 display-5">Economique <span>et facile</span></h2>
+                        <p class="mbr-fonts-style text1 mbr-text display-6">Prix bas avec livraison incluse, et configurable facilement.</p>
                     </div>
                 </div>
             </div>

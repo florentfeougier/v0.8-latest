@@ -147,21 +147,10 @@
       <div class="form-check">
   <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
   <label class="form-check-label" for="exampleRadios1">
-    Livraison à domicile via Colissimo: 5€
+    Livraison à domicile via Colissimo gratuite
   </label>
 </div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-  <label class="form-check-label" for="exampleRadios2">
-    En point retrait
-  </label>
-</div>
-<div class="form-check disabled">
-  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-  <label class="form-check-label" for="exampleRadios3">
-    Retrait en boutique (fermer pour les fêtes)
-  </label>
-</div>
+
     </div>
 
   </div>

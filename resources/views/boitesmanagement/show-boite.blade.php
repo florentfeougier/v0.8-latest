@@ -7,7 +7,7 @@
 @extends('layouts.manager')
 
 @section('template_title')
-  Vente de {{ $vente->name }}
+  Vente de {{ $boite->name }}
 @endsection
 
 <?php
@@ -19,19 +19,19 @@
 @section('breadcrumb')
 <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Vente de {{ $vente->name }} du {{ date('d/m/Y', strtotime($vente->date)) }}</h1>
+            <h1 class="m-0 text-dark">Vente de {{ $boite->name }} du {{ date('d/m/Y', strtotime($boite->date)) }}</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ url("manager/dashboard") }}">Accueil</a></li>
               <li class="breadcrumb-item"><a href="{{ url("manager/ventes") }}">Ventes</a></li>
-              <li class="breadcrumb-item active">{{ $vente->slug }}</li>
+              <li class="breadcrumb-item active">{{ $boite->slug }}</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
 @endsection
 
-@foreach(\App\Models\Order::where('cart', $vente->slug)->where('payment_status', true)->get() as $order)
+@foreach(\App\Models\Order::where('cart', $boite->slug)->where('payment_status', true)->get() as $order)
   
     <?php
 
@@ -74,7 +74,7 @@
                   <div class="info-box bg-light">
                     <div class="info-box-content">
                       <span class="info-box-text text-center text-muted">Commandes</span>
-                      <span class="info-box-number text-center text-muted mb-0">{{ count(\App\Models\Order::where('cart', $vente->slug)->where('payment_status', true)->get()) }}</span>
+                      <span class="info-box-number text-center text-muted mb-0">{{ count(\App\Models\Order::where('cart', $boite->slug)->where('payment_status', true)->get()) }}</span>
                     </div>
                   </div>
                 </div>
@@ -84,7 +84,7 @@
                       <span class="info-box-text text-center text-muted">Revenues total</span>
                       <span class="info-box-number text-center text-muted mb-0">
                          <?php $revenue = 0;
-                  foreach(\App\Models\Order::where('cart',$vente->slug)->where('payment_status', true)->get() as $order){
+                  foreach(\App\Models\Order::where('cart',$boite->slug)->where('payment_status', true)->get() as $order){
 
                     $revenue += $order->amount;
                   }
@@ -100,7 +100,7 @@
                   <div class="info-box bg-light">
                     <div class="info-box-content">
                       <span class="info-box-text text-center text-muted">Produits en vente</span>
-                      <span class="info-box-number text-center text-muted mb-0">{{ count($vente->products) }} <span>
+                      <span class="info-box-number text-center text-muted mb-0">{{ count($boite->products) }} <span>
                     </div>
                   </div>
                 </div>
@@ -120,8 +120,8 @@
                       </div>
                       <!-- /.user-block -->
                       <p>
-                        @if(count($vente->products) > 0)
-                        @foreach($vente->products as $product)
+                        @if(count($boite->products) > 0)
+                        @foreach($boite->products as $product)
                         <a data-toggle="tooltip" title="
 
                         @foreach($sold as $a => $s)
@@ -145,10 +145,10 @@
               <ul class="list-unstyled">
                 
                 <li>
-                  <a target="_blank" href="{{url("manager/ventes/" . $vente->id . "/export-orders")}}" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> Liste des commandes (texte)</a>
+                  <a target="_blank" href="{{url("manager/ventes/" . $boite->id . "/export-orders")}}" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> Liste des commandes (texte)</a>
                 </li>
                 <li>
-                  <a target="_blank" href="{{url("manager/ventes/" . $vente->id . "/export-orders-mailing-list")}}" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Liste des emails clients</a>
+                  <a target="_blank" href="{{url("manager/ventes/" . $boite->id . "/export-orders-mailing-list")}}" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Liste des emails clients</a>
                 </li>
                 
                 <li>
@@ -165,15 +165,15 @@
               </div>
             </div>
             <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-              <img height="140px" src="{{ url("$vente->thumbnail") }}" class="img-fluid mb-2 rounded" alt="">
-              <h4 class="text-secondary"><i class="fa fa-map-marker"></i> {{ $vente->location_address }} {{ $vente->city }}</h4>
-              <h4 class="text-secondary"><i class="fa fa-calendar"></i> {{ $vente->date }}</h4>
-              <p class="text-muted">{{ $vente->description }}</p>
+              <img height="140px" src="{{ url("$boite->thumbnail") }}" class="img-fluid mb-2 rounded" alt="">
+              <h4 class="text-secondary"><i class="fa fa-map-marker"></i> {{ $boite->location_address }} {{ $boite->city }}</h4>
+              <h4 class="text-secondary"><i class="fa fa-calendar"></i> {{ $boite->date }}</h4>
+              <p class="text-muted">{{ $boite->description }}</p>
              
               
              
               <div class="text-center mt-5 mb-3">
-                <a href="{{ url("manager/ventes/$vente->id/edit") }}" class="btn btn-sm btn-secondary">Modifier cette vente</a>
+                <a href="{{ url("manager/ventes/$boite->id/edit") }}" class="btn btn-sm btn-secondary">Modifier cette vente</a>
                 
               </div>
             </div>
@@ -187,7 +187,7 @@
 <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Commandes ({{ count(\App\Models\Order::where('cart', $vente->slug)->where('payment_status', true)->get()) }} payées sur {{ count(\App\Models\Order::where('cart', $vente->slug)->get()) }} )</h3>
+          <h3 class="card-title">Commandes ({{ count(\App\Models\Order::where('cart', $boite->slug)->where('payment_status', true)->get()) }} payées sur {{ count(\App\Models\Order::where('cart', $boite->slug)->get()) }} )</h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Ouvrir">
@@ -210,7 +210,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach(\App\Models\Order::where('cart', $vente->slug)->get() as $order)
+                @foreach(\App\Models\Order::where('cart', $boite->slug)->get() as $order)
                 <tr>
                   <td>
                     {{$order->order_id}}
@@ -222,7 +222,7 @@
                       @if($order->cart == "shop")
                       shop
                       @else
-                      <a  target="_blank" class="text-dark" href="{{ url("manager/ventes/" . \App\Models\Vente::where('slug', $order->cart)->first()->slug) }}">{{ \App\Models\Vente::where('slug', $order->cart)->first()->name }} le {{ date('d/m/Y', strtotime($vente->date)) }}</a>
+                      mmmm
                       @endif
                     </small></td>
                     <td><small ><a data-toggle="tooltip" title="{{ $order->user->first_name }} {{ $order->user->last_name }}" href="{{ url("manager/users/" . $order->user->id) }}" target="_blank" class="text-dark">{{ $order->user->email }}</a>

@@ -250,7 +250,8 @@
   Commande réceptionné par le client
 
     <a class="btn btn-sm  btn-outline-secondary" href="{{ url("manager/orders/" . $order->id . "/close") }}">Annuler <i class="fa fa-times"></i></a>
-  @else
+  @elseif( \App\Models\Vente::where('slug', $order->cart)->first() != null)
+
    <p class="text-muted">
    Le client viendra récupérer sa commande lors de la vente de {{ \App\Models\Vente::where('slug', $order->cart)->first()->name }} du {{ \App\Models\Vente::where('slug', $order->cart)->first()->date }} à l'adresse: {{ \App\Models\Vente::where('slug', $order->cart)->first()->location_address }} {{ \App\Models\Vente::where('slug', $order->cart)->first()->location_postalcode }}
  </p>
@@ -258,7 +259,8 @@
   La commande n'a pas encore été réceptionné par le client.
 
   <a class="btn btn-sm btn-outline-success" href="{{ url("manager/orders/" . $order->id . "/close") }}">Remettre la commande au client <i class="fa fa-check"></i></a>
-
+  @else
+  Box
   @endif
 </p>
 @endif

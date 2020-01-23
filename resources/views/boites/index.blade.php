@@ -169,8 +169,8 @@ Nos box
             <span class="block4-overlay-heart  text-white  flex-m trans-0-4 p-4">
 
               <span class="p-t-2 ">
-                <img src="{{asset("storage/icons/calendar-w.svg")}}" style="width:20px;margin:0; padding:0;"width="20px" height="15px" alt="Date de l'evenement">
-                {{ date('d/m/Y', strtotime($boite->date)) }} de {{$boite->horaires}}</span>
+                {{-- <img src="{{asset("storage/icons/calendar-w.svg")}}" style="width:20px;margin:0; padding:0;"width="20px" height="15px" alt="Date de l'evenement">
+                {{ date('d/m/Y', strtotime($boite->date)) }} de {{$boite->horaires}} --}}</span>
             </span>
 
             <div class="block4-overlay-txt trans-0-4 p-4">
@@ -181,11 +181,11 @@ Nos box
 
               <span class="s-text9 text-white">
                 <img  src="{{asset("storage/icons/marker-w.svg")}}" style="width:20px;margin:0; padding:0;" width="20px" height="15px" alt="Lieu de la vente">
-@if($boite->show_location == true)
+{{-- @if($boite->show_location == true)
    {{ $boite->location_address }} - {{$boite->location_postalcode}}
 @else
   Lieu non dévoilé
-@endif
+@endif --}}
               </span>
             </div>
           </a>
